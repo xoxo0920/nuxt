@@ -74,7 +74,6 @@ export default {
         url:"/scenics/banners",
         method:"GET"
       }).then(res=>{
-        console.log(res);
         const { status,data} = res.data;
         this.banners = data
       })

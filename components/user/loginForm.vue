@@ -42,7 +42,7 @@ export default {
         handleSubmit(){
             //验证表单
             this.$refs.form.validate((valid) => {
-                //为true不是没有错误
+                //为true没有错误
                 if(valid){
                     // 登录接口
                     this.$axios({

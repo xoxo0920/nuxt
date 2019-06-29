@@ -1,4 +1,4 @@
-import { resolve } from "q";
+
 
 //用户管理
 //store中的state不能修改的类似于vue组件的data，用于声明仓库数据
@@ -15,6 +15,7 @@ export const mutations = {
     setUserInfo(state,data){
         state.userInfo = data;
     },
+    //设置用户的数据为空，相当于退出
     clearUserInfo(state){
         state.userInfo = {
             token:"",

@@ -48,7 +48,7 @@ export default {
     methods:{
         //用户退出
         handleLogout(){
-            //清楚store的数据
+            //清除store的数据
             this.$store.commit("user/clearUserInfo")
             this.$message.success("账号退出成功...")
         }
