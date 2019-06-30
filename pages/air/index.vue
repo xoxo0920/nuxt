@@ -44,7 +44,7 @@
                     <img :src="item.cover"/>
                     <el-row class="layer-bar" type="flex" justify="space-between">
                         <span>{{item.departCity}}-{{item.destCity}}</span>
-                        <span>￥699</span>
+                        <span>￥{{item.price}}</span>
                     </el-row>
                 </nuxt-link>
             </el-col>
@@ -72,7 +72,8 @@ export default {
             method:"GET"
         }).then(res=>{
             // console.log(res.data);
-            this.sales = res.data
+            const {data} = res.data;
+            this.sales = data;
         })
     }
 }

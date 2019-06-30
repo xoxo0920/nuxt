@@ -82,7 +82,15 @@ export default {
     },
     methods:{
         //tab栏切换时触发
-        handleSearchTab(index){},
+        handleSearchTab(index){
+            if(index === 1){
+                this.$confirm("目前暂不支持往返，请使用单程选票！", '提示', {
+                    confirmButtonText: '确定',
+                    showCancelButton: false,
+                    type: 'warning'
+                })
+            }
+        },
         //出发城市输入框获得焦点时触发
         //value是选中的 值，cb是回调函数，接收要显示的列表
         queryDepartSearch(value,cb){
@@ -94,14 +102,15 @@ export default {
                 // url: "http://157.122.54.189:9095/airs/city?name=" + value,
                 method:"GET"
             }).then(res=>{
-                console.log(res.data);
                 const {data} = res.data;
                 const newData = data.map(v=>{
                     return{
                         ...v,
                         value:v.name.replace("市","")
                     }
-                })
+                });
+                this.form.departCity = newData[0].value;
+                this.form.departCode = newData[0].sort;
                 //cb函数接收的参数是数组，数据里面每一项必须是对象，带有value属性
                 cb(newData)
             })
@@ -113,18 +122,19 @@ export default {
                 return
             }
             this.$axios({
-                // url:"/airs/city?name="+value,
-                url: "http://157.122.54.189:9095/airs/city?name=" + value,
+                url:"/airs/city?name="+value,
+                // url: "http://157.122.54.189:9095/airs/city?name=" + value,
                 method:"GET"
             }).then(res=>{
-                console.log(res.data);
                 const {data} = res.data;
                 const newData = data.map(v=>{
                     return{
                         ...v,
                         value:v.name.replace("市","")
                     }
-                })
+                });
+                this.form.destCity = newData[0].value;
+                this.form.destCode = newData[0].sort;
                 //cb函数接收的参数是数组，数据里面每一项必须是对象，带有value属性
                 cb(newData)
             })
@@ -136,16 +146,22 @@ export default {
         },
         //到达城市下拉时触发
         handleDestSearch(item){
-            this.form.departCity = item.value;
-            this.form.departCode = item.sort;
+            this.form.destCity = item.value;
+            this.form.destCode = item.sort;
         },
         //确认日期后触发
-        handleDate(){
-
+        handleDate(value){
+             this.form.departDate = moment(value).format(`YYYY-MM-DD`)
         },
         //触发和目标城市切换时触发
         handleReverse(){
-            this.form.departDate = moment(value).format(`YYYY-MM-DD`)
+           const {departCity,departCode,destCity,destCode} = this.form;
+
+           this.form.departCity = destCity;
+           this.form.departCode = destCity;
+
+           this.form.destCity = departCity;
+           this.form.destCode = departCode;
         },
         // 提交表单时触发
         handleSubmit(){
