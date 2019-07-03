@@ -46,7 +46,8 @@
                         <el-col :span="3" class="choose-button">
                             <el-button 
                             type="warning" 
-                            size="mini">
+                            size="mini" 
+                            @click="handleClick(item)">
                             选定
                             </el-button>
                             <p>剩余：{{item.discount}}</p>
@@ -75,6 +76,16 @@ export default {
     methods:{
         handleShow(){
             this.isShow = !this.isShow;
+        },
+        handleClick(item){
+            this.$router.push({
+                //跳转的路径
+                path:"/air/order",
+                query:{
+                    id: this.data.id,
+                    seat_xid: item.seat_xid
+                }
+            })
         }
     },
     computed:{

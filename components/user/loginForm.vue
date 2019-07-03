@@ -57,7 +57,7 @@ export default {
                         this.$message.success("登录成功，正在跳转...");
                         setTimeout(()=>{
                             this.$router.push("/")
-                        },1000)
+                        },1000) 
                     })
                     //调用actions
                     // this.$store.dispatch("user/login",this.form).then(v=>{
@@ -69,6 +69,9 @@ export default {
                 }
             })
         }
+    },
+    mounted(){
+        console.log(this.$store.commit);
     }
 }
 </script>

@@ -41,9 +41,10 @@
             <el-col :span="4">
                 <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
                     <el-option
-                    v-for="(item,index) in sizeOptions" :key="index"
-                    :value="item.name"
-                    :label="item.size">
+                    v-for="(item,index) in sizeOptions" 
+                    :key="index"
+                    :label="item.name"
+                    :value="item.type">
                     </el-option>
                 </el-select>
             </el-col>
@@ -94,17 +95,34 @@ export default {
 
         // 选择出发时间时候触发
         handleFlightTimes(value){
-            
+            //  console.log(value);
+             const arr = this.data.flights.filter(v =>{
+                 const start = v.dep_time.split(":")[0];
+
+                //过滤航空公司的值等于value
+                return start >=value.from && start < value.to;
+            })
+            this.$emit("setDataList",arr);
         },
 
          // 选择航空公司时候触发
         handleCompany(value){
-            
+            // console.log(value);
+            // console.log(this.data.flights);
+            const arr = this.data.flights.filter(v =>{
+                //过滤航空公司的值等于value
+                return v.airline_name === value;
+            })
+            this.$emit("setDataList",arr);
         },
 
          // 选择机型时候触发
         handleAirSize(value){
-           
+           const arr = this.data.flights.filter(v =>{
+                //过滤航空公司的值等于value
+                return v.plane_size === value;
+            })
+            this.$emit("setDataList",arr);
         },
         
         // 撤销条件时候触发

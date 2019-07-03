@@ -4,7 +4,8 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content"> 
                 <!-- 过滤条件 -->
-                <flightsFilters :data="flightsData"/>
+                <flightsFilters :data="cacheflightsData"
+                @setDataList="setDataList"/>
                 <!-- 航班头部布局 -->
                  <fightsListHead/> 
                 <!-- 航班信息 -->
@@ -61,22 +62,23 @@ export default {
             pageIndex:1,//当前页数
             pageSize:5,  //显示条数
             total:0,
+
+            cacheflightsData:{
+            //默认机票数据
+                info:{},
+                options:{},
+                flights:[]
+            }
+        }
+        
+    },
+    watch:{
+        $route(){
+            this.getData();
         }
     },
     mounted(){
-        this.$axios({
-            url:"/airs",
-            params:this.$route.query //url的参数
-        }).then(res=>{
-            console.log(res.data);
-            this.flightsData = res.data;
-            this.dataList = this.flightsData.flights;
-            //获取1到5条数据
-            this.dataList = res.data.flights.slice(0,5);
-            //总条数
-            this.total = res.data.total;
-
-        })
+        this.getData()
     },
     methods:{
         // 分页切换条数触发
@@ -88,13 +90,42 @@ export default {
         handleCurrentChange(value){
             this.pageIndex = value;
 
+            this.setDataList()
+        },
+        //修改dataList
+        setDataList(arr){
+            if(arr){
+                this.flightsData.flights = arr ; 
+                //初始化分页变量
+                this.total = arr.length;
+                this.pageIndex = 1
+            }
             //计算切换列表的数据
             this.dataList = this.flightsData.flights.slice(
                 (this.pageIndex - 1) * this.pageSize,
                 this.pageIndex * this.pageSize
             )
+        },
+        getData(){
+             //请求机票列表的数据
+                this.$axios({
+                url:"/airs",
+                params:this.$route.query //url的参数
+            }).then(res=>{
+                // console.log(res.data);
+                this.flightsData = res.data;
+
+                this.cacheflightsData = {...res.data}
+                //获取1到5条数据
+                this.dataList = res.data.flights.slice(0,5);
+                //初始化数据
+                this.pageIndex = 1;
+                //总条数
+                this.total = res.data.total;
+
+            })
         }
-    }
+    },
 }
 </script>
 
